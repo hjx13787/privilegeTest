@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="com.genuitec.runtime.library/com.genuitec.hibernate_4.1">
+		<attributes>
+			<attribute name="owner.project.facets" value="me.hibernate"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Michael/.m2/repository/org/apache/mina/mina-core/2.0.7/mina-core-2.0.7.jar" sourcepath="C:/Users/Michael/.m2/repository/org/apache/mina/mina-core/2.0.7/mina-core-2.0.7-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Michael/.m2/repository/org/apache/mina/mina-core/2.0.7/mina-core-2.0.7-javadoc.jar!/"/>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.mina"/>
+			<attribute name="maven.artifactId" value="mina-core"/>
+			<attribute name="maven.version" value="2.0.7"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Michael/.m2/repository/org/eclipse/jface/org.eclipse.jface/3.8.0.v20120521-2329/org.eclipse.jface-3.8.0.v20120521-2329.jar" sourcepath="C:/Users/Michael/.m2/repository/org/eclipse/jface/org.eclipse.jface/3.8.0.v20120521-2329/org.eclipse.jface-3.8.0.v20120521-2329-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.eclipse.jface"/>
+			<attribute name="maven.artifactId" value="org.eclipse.jface"/>
+			<attribute name="maven.version" value="3.8.0.v20120521-2329"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Michael/.m2/repository/org/eclipse/swt/org.eclipse.swt.win32.win32.x86/3.8/org.eclipse.swt.win32.win32.x86-3.8.jar" sourcepath="C:/Users/Michael/.m2/repository/org/eclipse/swt/org.eclipse.swt.win32.win32.x86/3.8/org.eclipse.swt.win32.win32.x86-3.8-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.eclipse.swt"/>
+			<attribute name="maven.artifactId" value="org.eclipse.swt.win32.win32.x86"/>
+			<attribute name="maven.version" value="3.8"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.commands-3.6.1.v20120521-2329.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
