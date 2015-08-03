@@ -148,7 +148,7 @@ public class MainView {
 		label.setText("01");
 
 		text = new Text(composite_1, SWT.BORDER);
-		text.setText("1");
+		text.setText("192.168.1.242");
 		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_text.widthHint = 87;
 		text.setLayoutData(gd_text);
@@ -756,6 +756,7 @@ public class MainView {
 			public void run() {
 				if(log==null){
 					text_21.setText("");
+					return;
 				}
 				text_21.append(log+"\n");
 			}

@@ -6,12 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ClientHandler extends IoHandlerAdapter {
-    private String values=null;
-
-    public ClientHandler(String values) {
-	this.values = values;
-    }
-    public ClientHandler(){
-    	
-    }
+	@Override
+	public void messageReceived(IoSession session, Object message) throws Exception {
+		super.messageReceived(session, message);
+	}
+	@Override
+	public void messageSent(IoSession session, Object message) throws Exception {
+		super.messageSent(session, message);
+	}
+    
 }

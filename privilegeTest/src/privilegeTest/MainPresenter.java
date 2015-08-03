@@ -1,5 +1,6 @@
 package privilegeTest;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import privilegeTest.mina.MainClient;
+import privilegeTest.util.ByteUtils;
+import privilegeTest.util.Utils;
 
 public class MainPresenter {
 	CardDAO cd = new CardDAO();
@@ -31,12 +34,10 @@ public class MainPresenter {
 
 	List<Card> listc = new ArrayList<Card>();
 
-	MainClient client = new MainClient();
-
 	MainView view;
 
 	public void initCard(int num) {
-		setLog("开始初始化卡片，数量为"+num);
+		setLog("开始初始化卡片，数量为" + num);
 		for (int i = 0; mapcard.keySet().size() < num;) {
 			StringBuilder cardnum = new StringBuilder("00000000");
 			Random rm = new Random();
@@ -45,7 +46,6 @@ public class MainPresenter {
 			}
 			mapcard.put(cardnum.toString(), "");
 		}
-		System.out.println(mapcard.keySet().size());
 		saveCard();
 		setLog("初始化卡片完成");
 	}
@@ -80,41 +80,44 @@ public class MainPresenter {
 
 	// 查找指令
 	private String getCardSearch(String string) {
-		String s1="01 57 00 01 00 01 02 ";
-		String s2=getCardByte(string);
-		String search=s1+s2+"15 08 03 11 03 16 08 03 11 03 0B 03 ";
-		search+=getCheckByte(search);
+		String s1 = "01 57 00 01 00 01 E4 02 ";
+		String s2 = getCardByte(string);
+		String search = s1 + s2 + "03 ";
+		search += getCheckByte(search);
 		return search;
 	}
-	//检验位
+
+	// 校验位
 	private String getCheckByte(String s) {
-		
-		return "";
+		byte[] hexStringToByteArray = ByteUtils.hexStringToByteArray(s.replaceAll(" ", ""));
+		byte bcc = Utils.BCC(hexStringToByteArray, 0, hexStringToByteArray.length - 1);
+		return ByteUtils.byteToHexString(bcc);
 	}
 
-	//获得卡片字节
+	// 获得卡片字节
 	private String getCardByte(String string) {
-		StringBuilder substring=new StringBuilder("");
-		for (int i = 16; i > 2; i=i-2) {
-			substring = substring.append(string.substring(i-2, i)+" ");
+		StringBuilder substring = new StringBuilder("");
+		for (int i = 16; i > 0; i = i - 2) {
+			substring.append(string.substring(i - 2, i) + " ");
 		}
 		return substring.toString();
 	}
+
 	// 删除指令
 	private String getCardDelete(String string) {
-		String s1="01 57 00 01 00 01 02 ";
-		String s2=getCardByte(string);
-		String search=s1+s2+"15 08 03 11 03 16 08 03 11 03 0B 03 ";
-		search+=getCheckByte(search);
+		String s1 = "01 57 00 01 00 01 E1 02 ";
+		String s2 = getCardByte(string);
+		String search = s1 + s2 + "03 ";
+		search += getCheckByte(search);
 		return search;
 	}
 
 	// 上传指令
 	private String getCardUpload(String string) {
-		String s1="01 57 00 01 00 01 02 ";
-		String s2=getCardByte(string);
-		String search=s1+s2+"15 08 03 11 03 16 08 03 11 03 0B 03 ";
-		search+=getCheckByte(search);
+		String s1 = "01 57 00 01 00 01 E0 02 ";
+		String s2 = getCardByte(string);
+		String search = s1 + s2 + "15 08 03 11 03 16 08 03 11 03 0B 03 ";
+		search += getCheckByte(search);
 		return search;
 	}
 
@@ -124,7 +127,7 @@ public class MainPresenter {
 	}
 
 	public void go() {
-		boolean init = new BaseDao().init();
+//		boolean init = new BaseDao().init();
 		try {
 			listc = cd.findAll();
 		} catch (Exception e) {
@@ -152,6 +155,9 @@ public class MainPresenter {
 			view.setLog(null);
 			for (; i <= 10; i++) {
 				if (runMap.get(i) == null) {
+					continue;
+				}
+				if (deviceMap.get(i) == null || deviceMap.get(i).equals("")) {
 					continue;
 				}
 				if (runMap.get(i) == 1) {
@@ -183,17 +189,22 @@ public class MainPresenter {
 
 	// 初始化设备
 	private void deviceInit(String string, List<Card> listc2) {
-		client.send(string, getDeviceInitMsg());
+		MainClient client = new MainClient();
+		setLog(string + "开始初始化设备");
+		client.send(string, getDeviceInitMsg().replaceAll(" ", ""));
+		setLog(string + "初始化设备完成");
+
 	}
 
 	private String getDeviceInitMsg() {
-
-		return "";
+		String search = "01 57 00 01 00 01 E2 02 03 ";
+		search += getCheckByte(search);
+		return search;
 	}
 
 	// 对比
 	private void count(String string, List<Card> listc2) {
-		new Thread(new Count(string,listc2)).start();
+		new Thread(new Count(string, listc2)).start();
 	}
 
 	// 删除
@@ -204,13 +215,14 @@ public class MainPresenter {
 
 	// 下载
 	protected void uploadCard(String string, List<Card> listc2) {
-//		for (Card card : listc2) {
-//			Task t = new Task();
-//			t.setIp(string);
-//			t.setCard(card);
-//			t.setStatustype(privilegeType.waitupload.name());
-//			td.save(t);
-//		}
+		td.deleteTaskAll(string);
+		for (Card card : listc2) {
+			Task t = new Task();
+			t.setIp(string);
+			t.setCard(card);
+			t.setStatustype(privilegeType.waitupload.name());
+			td.save(t);
+		}
 		new Thread(new Upload(string)).start();
 
 	}
@@ -225,6 +237,7 @@ public class MainPresenter {
 
 	public class Upload implements Runnable {
 		String ip;
+		MainClient client = new MainClient();
 
 		Upload(String ip) {
 			this.ip = ip;
@@ -232,27 +245,34 @@ public class MainPresenter {
 
 		@Override
 		public void run() {
-			view.setLog(ip+"开始下载权限");
-			List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitupload);
-			int i=1;
-			for (Task t : findTaskList) {
-				System.out.println(ip+"==="+t.getCard().getUploadno());
-				byte[] send = client.send(ip, t.getCard().getUploadno());
-				boolean flag = checkUploadMsg(send);
-				System.out.println(ip+"开始下载权限"+i+"=="+flag);
-				i++;
-//				if (flag) {
-//					t.setStatustype(privilegeType.uploaded.name());
-//				} else {
-//					t.setStatustype(privilegeType.unupload.name());
-//				}
-//				td.attachDirty(t);
+			view.setLog(ip + "开始下载权限");
+			int i = 0;
+			try {
+				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitupload);
+				System.out.println(findTaskList.size());
+				
+				for (Task t : findTaskList) {
+					String uploadno = t.getCard().getUploadno();
+					String replaceAll = uploadno.replaceAll(" ", "");
+					String send = client.send(ip, replaceAll);
+					boolean flag = checkUploadMsg(send);
+					if (flag) {
+						t.setStatustype(privilegeType.uploaded.name());
+						i++;
+					} else {
+						t.setStatustype(privilegeType.unupload.name());
+					}
+					td.attachDirty(t);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			view.setLog(ip+"下载权限完成");
+			view.setLog(ip + "下载权限完成,下载了" + i + "条权限");
 		}
 
-		private boolean checkUploadMsg(byte[] send) {
-			if(send[9]==79){
+		private boolean checkUploadMsg(String send) {
+			String substring = send.substring(25, 27);
+			if (substring.equals("79")) {
 				return true;
 			}
 			return false;
@@ -262,6 +282,7 @@ public class MainPresenter {
 
 	public class Delete implements Runnable {
 		String ip;
+		MainClient client = new MainClient();
 
 		Delete(String ip) {
 			this.ip = ip;
@@ -269,22 +290,30 @@ public class MainPresenter {
 
 		@Override
 		public void run() {
+			view.setLog(ip + "开始删除权限");
+			int i=0;
 			List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitdelete);
 			for (Task t : findTaskList) {
-				byte[] send = client.send(ip, t.getCard().getDeleteno());
+				String replaceAll = t.getCard().getDeleteno().replaceAll(" ", "");
+				String send = client.send(ip, replaceAll);
 				boolean flag = checkDeleteMsg(send);
 				if (flag) {
 					t.setStatustype(privilegeType.deleteed.name());
+					i++;
 				} else {
 					t.setStatustype(privilegeType.undelete.name());
 				}
 				td.attachDirty(t);
 			}
+			setLog(ip + "删除权限完成,删除了" + i + "条权限");
 		}
 
 		// 判断是否成功
-		private boolean checkDeleteMsg(byte[] send) {
-
+		private boolean checkDeleteMsg(String send) {
+			String substring = send.substring(25, 27);
+			if (substring.equals("79")) {
+				return true;
+			}
 			return false;
 		}
 
@@ -294,6 +323,7 @@ public class MainPresenter {
 		String ip;
 		List<Card> list;
 		List<Card> noList = new ArrayList<Card>();
+		MainClient client = new MainClient();
 
 		Count(String ip, List<Card> list) {
 			this.ip = ip;
@@ -302,20 +332,20 @@ public class MainPresenter {
 
 		@Override
 		public void run() {
+
 			for (Card c : list) {
-				byte[] send = client.send(ip, c.getSearchno());
+				String send = client.send(ip, c.getSearchno().replaceAll(" ", ""));
 				boolean flag = checkSearchMsg(send);
 				if (!flag) {
 					noList.add(c);
 				}
 			}
-			view.setLog(ip+"对比完成"+noList);
+			view.setLog(ip + "对比完成，有" + noList.size() + "张卡片没有，\n" + noList);
 
 		}
 
-		private boolean checkSearchMsg(byte[] send) {
-
-			return false;
+		private boolean checkSearchMsg(String send) {
+			return !send.contains("FF FF FF FF FF FF FF FF");
 		}
 
 	}
@@ -330,10 +360,16 @@ public class MainPresenter {
 
 	// 读数
 	public void summayAllDevice() {
+
 		Map<Integer, Integer> nums = new HashMap<Integer, Integer>();
 		for (int i = 1; i < 11; i++) {
+			MainClient client = new MainClient();
 			String string = deviceMap.get(i);
-			byte[] send = client.send(string, getCountPrivilegeMsg());
+			String send = client.send(string, getCountPrivilegeMsg().replaceAll(" ", ""));
+			if (send == null) {
+				nums.put(i, null);
+				continue;
+			}
 			int no = checkCountPrivilegeReturn(send);
 			nums.put(i, no);
 		}
@@ -341,14 +377,20 @@ public class MainPresenter {
 
 	}
 
-	private int checkCountPrivilegeReturn(byte[] send) {
+	private int checkCountPrivilegeReturn(String s) {
+		String substring = s.substring(25, 27);
+		String substring2 = s.substring(28, 30);
+		int parseInt = Integer.parseInt(substring, 16);
+		int parseInt2 = Integer.parseInt(substring2, 16);
+		int i = parseInt2 * 256 + parseInt;
 		return i;
 	}
 
 	// 统计权限命令
 	private String getCountPrivilegeMsg() {
-
-		return null;
+		String search = "01 57 00 01 00 01 E3 02 03";
+		search += getCheckByte(search);
+		return search;
 	}
 
 	public void setView(MainView view) {

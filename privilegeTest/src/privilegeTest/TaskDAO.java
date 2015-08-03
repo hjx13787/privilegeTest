@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -210,9 +211,9 @@ public class TaskDAO extends BaseHibernateDAO {
 	Session session = null;
 	try {
 	    session = getSession();
-	    Query createQuery = session.createQuery("update from Task set statustype='"
-		    + privilegeType.waitdelete + "' where ip=" + string);
-	    createQuery.executeUpdate();
+	    SQLQuery createSQLQuery = session.createSQLQuery("update Task set statustype='"
+		    + privilegeType.waitdelete + "' where ip='" + string+"'");
+	    createSQLQuery.executeUpdate();
 	    log.debug("delete successful");
 	} catch (RuntimeException re) {
 	    log.error("delete failed", re);
@@ -222,4 +223,21 @@ public class TaskDAO extends BaseHibernateDAO {
 	}
 
     }
+	public void deleteTaskAll(String string) {
+		log.debug("deleting Task instance");
+		Session session = null;
+		try {
+		    session = getSession();
+		    SQLQuery createSQLQuery = session.createSQLQuery("delete from Task where ip='" + string+"'");
+		    createSQLQuery.executeUpdate();
+//		    Query createQuery = session.createQuery("delete from Task t where t.ip=" + string);
+//		    createQuery.executeUpdate();
+		    log.debug("delete successful");
+		} catch (RuntimeException re) {
+		    log.error("delete failed", re);
+		    throw re;
+		}finally{
+		    closeSession(session);
+		}
+	}
 }
