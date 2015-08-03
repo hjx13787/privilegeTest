@@ -81,7 +81,7 @@ public class MainView {
 	protected void createContents() {
 		presenter.go();
 		shell = new Shell();
-		shell.setSize(687, 577);
+		shell.setSize(687, 684);
 		shell.setText("\u4E1C\u9646\u6743\u9650\u6D4B\u8BD5");
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 
@@ -125,20 +125,16 @@ public class MainView {
 		button_41.setText("\u6E05\u9664");
 
 		Composite composite_2 = new Composite(composite, SWT.NONE);
-		composite_2.setLayout(new GridLayout(2, false));
-		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-
-		Composite composite_3 = new Composite(composite_2, SWT.NONE);
-		composite_3.setLayout(new FillLayout(SWT.HORIZONTAL));
-		GridData gd_composite_3 = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
-		gd_composite_3.widthHint = 186;
-		composite_3.setLayoutData(gd_composite_3);
-
-		text_21 = new Text(composite_3, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		composite_2.setLayout(new GridLayout(1, false));
+		GridData gd_composite_2 = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+		gd_composite_2.heightHint = 443;
+		composite_2.setLayoutData(gd_composite_2);
 
 		Composite composite_4 = new Composite(composite_2, SWT.NONE);
 		composite_4.setLayout(new GridLayout(1, false));
-		composite_4.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_composite_4 = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_composite_4.heightHint = 448;
+		composite_4.setLayoutData(gd_composite_4);
 
 		Composite composite_1 = new Composite(composite_4, SWT.NONE);
 		composite_1.setLayout(new GridLayout(7, false));
@@ -724,6 +720,15 @@ public class MainView {
 			}
 		});
 		btnNewButton.setText("\u8BFB\u6570");
+						
+								Composite composite_3 = new Composite(composite, SWT.NONE);
+								composite_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+										composite_3.setLayout(new GridLayout(1, false));
+								
+										text_21 = new Text(composite_3, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+										GridData gd_text_21 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+										gd_text_21.heightHint = 114;
+										text_21.setLayoutData(gd_text_21);
 		presenter.setView(this);
 
 	}

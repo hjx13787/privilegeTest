@@ -63,7 +63,7 @@ public class Task  implements java.io.Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
         @JoinColumn(name="cid")
 
     public Card getCard() {

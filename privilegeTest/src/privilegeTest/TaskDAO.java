@@ -188,7 +188,7 @@ public class TaskDAO extends BaseHibernateDAO {
 	}
     }
 
-    public List<Task> findTaskList(String ip, privilegeType waitupload) {
+	public List<Task> findTaskList(String ip, privilegeType waitupload) {
 	Session session = null;
 	try {
 	    session = getSession();

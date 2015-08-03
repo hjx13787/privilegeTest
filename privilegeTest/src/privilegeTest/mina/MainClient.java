@@ -7,6 +7,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.future.ConnectFuture;
+import org.apache.mina.core.future.ReadFuture;
+import org.apache.mina.core.future.WriteFuture;
 import org.apache.mina.core.service.IoConnector;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
@@ -54,31 +56,51 @@ public class MainClient {
 		connector.dispose();
 	}
 	
-	public byte[] send(String ip,String msg){
-		IoConnector connector = new NioSocketConnector();
-		connector.setConnectTimeoutMillis(1000);
-		connector.getFilterChain().addLast(
-			"codec",
-			(IoFilter) new ProtocolCodecFilter(new TextLineCodecFactory(
-				Charset.forName("UTF-8"))));
-		
-		    connector.setHandler(new ClientHandler(msg));
-			ConnectFuture connFuture = connector.connect(new InetSocketAddress(
-				"localhost", 9123));
-			connFuture.awaitUninterruptibly(1,TimeUnit.SECONDS);
-			IoSession session = connFuture.getSession();
-			if(session==null){
-				return null;
-			}
-			session.getConfig().setUseReadOperation(true);
-			Object message = session.read().awaitUninterruptibly().getMessage();
-			System.out.println("msg===="+message);
-			byte[] bytes = (byte[]) message;
-			session.getCloseFuture().awaitUninterruptibly();
-			connector.dispose();
+	public synchronized byte[] send(String ip,Object msg){
+		try {
+			IoConnector connector = new NioSocketConnector();
+			connector.setConnectTimeoutMillis(1000);
+			connector.getFilterChain().addLast(
+				"codec",
+				(IoFilter) new ProtocolCodecFilter(new TextLineCodecFactory(
+					Charset.forName("UTF-8"))));
 			
-		
-		return bytes;
+			    connector.setHandler(new ClientHandler());
+				ConnectFuture connFuture = connector.connect(new InetSocketAddress(
+					ip, 10001));
+				if(connFuture==null){
+					throw new Exception("连接失败");
+				}
+				connFuture.awaitUninterruptibly(400);
+				IoSession session = connFuture.getSession();
+				if(session==null){
+					return null;
+				}
+				session.getConfig().setUseReadOperation(true);
+				WriteFuture write = session.write(msg);
+				write.awaitUninterruptibly(50);
+				if (write.getException()!=null) {
+					write.getException().printStackTrace();
+					throw new Exception("发送消息失败");
+				}
+				ReadFuture read = session.read();
+				read.awaitUninterruptibly(400);
+				if (read.getException()!=null) {
+					read.setClosed();
+					session.getConfig().setUseReadOperation(false);
+					read.getException().printStackTrace();
+					throw new Exception("读取消息失败");
+				}
+				Object message = read.getMessage();
+				System.out.println("msg===="+message);
+				byte[] bytes = (byte[]) message;
+				session.getCloseFuture().awaitUninterruptibly();
+				connector.dispose();
+			return bytes;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 }

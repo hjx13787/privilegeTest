@@ -14,7 +14,7 @@ public class BaseDao {
 
     String userName = "sa"; // 默认用户名
 
-    String userPwd = "sa"; // 密码
+    String userPwd = "a123456"; // 密码
 
     Connection dbConn;
     Statement sql;
@@ -43,23 +43,24 @@ public class BaseDao {
 	}
     }
 
-    public void init() {
+    public boolean init() {
 	try {
 	    File file=new File(fileName);
 	    if(file.exists()){
-		return;
-	    }else{
-		file.createNewFile();
+		return true;
 	    }
-	    String dbURL = "jdbc:sqlserver://192168.1.31:1433; DatabaseName=master";
+	    String dbURL = "jdbc:sqlserver://localhost:1433; DatabaseName=master";
 	    dbConn = DriverManager.getConnection(dbURL, userName, userPwd);
 	    sql = dbConn.createStatement();
 	   sql.execute("create database privilegetest");
 	   sql.execute("use privilegetest create table card(cid bigint PRIMARY KEY identity(1,1),identifire varchar(16),uploadno varchar(160),[deleteno] varchar(160),searchno varchar(160))");
 	   sql.execute("use privilegetest create table [task](id bigint PRIMARY KEY identity(1,1),cid bigint,ip varchar(160),[statustype] varchar(160))");
 	   sql.execute("ALTER TABLE [task] ADD CONSTRAINT main_id_cons FOREIGN KEY (cid) REFERENCES card ON DELETE CASCADE");
+	   file.createNewFile();
+	   return true;
 	} catch (Exception e) {
 	    e.printStackTrace();
+	    return false;
 	}
     }
      void save(String sql){

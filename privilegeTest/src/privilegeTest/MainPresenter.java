@@ -36,6 +36,7 @@ public class MainPresenter {
 	MainView view;
 
 	public void initCard(int num) {
+		setLog("开始初始化卡片，数量为"+num);
 		for (int i = 0; mapcard.keySet().size() < num;) {
 			StringBuilder cardnum = new StringBuilder("00000000");
 			Random rm = new Random();
@@ -46,6 +47,11 @@ public class MainPresenter {
 		}
 		System.out.println(mapcard.keySet().size());
 		saveCard();
+		setLog("初始化卡片完成");
+	}
+
+	private void setLog(String string) {
+		view.setLog(string);
 	}
 
 	private void saveCard() {
@@ -74,17 +80,42 @@ public class MainPresenter {
 
 	// 查找指令
 	private String getCardSearch(String string) {
-		return "1";
+		String s1="01 57 00 01 00 01 02 ";
+		String s2=getCardByte(string);
+		String search=s1+s2+"15 08 03 11 03 16 08 03 11 03 0B 03 ";
+		search+=getCheckByte(search);
+		return search;
+	}
+	//检验位
+	private String getCheckByte(String s) {
+		
+		return "";
 	}
 
+	//获得卡片字节
+	private String getCardByte(String string) {
+		StringBuilder substring=new StringBuilder("");
+		for (int i = 16; i > 2; i=i-2) {
+			substring = substring.append(string.substring(i-2, i)+" ");
+		}
+		return substring.toString();
+	}
 	// 删除指令
 	private String getCardDelete(String string) {
-		return "1";
+		String s1="01 57 00 01 00 01 02 ";
+		String s2=getCardByte(string);
+		String search=s1+s2+"15 08 03 11 03 16 08 03 11 03 0B 03 ";
+		search+=getCheckByte(search);
+		return search;
 	}
 
 	// 上传指令
 	private String getCardUpload(String string) {
-		return "1";
+		String s1="01 57 00 01 00 01 02 ";
+		String s2=getCardByte(string);
+		String search=s1+s2+"15 08 03 11 03 16 08 03 11 03 0B 03 ";
+		search+=getCheckByte(search);
+		return search;
 	}
 
 	public void clearCard() {
@@ -93,7 +124,7 @@ public class MainPresenter {
 	}
 
 	public void go() {
-		new BaseDao().init();
+		boolean init = new BaseDao().init();
 		try {
 			listc = cd.findAll();
 		} catch (Exception e) {
@@ -112,42 +143,41 @@ public class MainPresenter {
 	int i;
 
 	public void run() {
-		view.setLog("qqqqq");
-//		try {
-//			listc = cd.findAll();
-//			if (listc == null) {
-//				return;
-//			}
-//			i = 1;
-//			view.setLog(null);
-//			for (; i <= 10; i++) {
-//				if (runMap.get(i) == null) {
-//					continue;
-//				}
-//				if (runMap.get(i) == 1) {
-//					uploadCard(deviceMap.get(i), listc);
-//					continue;
-//				}
-//				;
-//				if (runMap.get(i) == 2) {
-//					delete(deviceMap.get(i), listc);
-//					continue;
-//				}
-//				;
-//				if (runMap.get(i) == 3) {
-//					count(deviceMap.get(i), listc);
-//					continue;
-//				}
-//				;
-//				if (runMap.get(i) == 4) {
-//					deviceInit(deviceMap.get(i), listc);
-//					continue;
-//				}
-//				;
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			listc = cd.findAll();
+			if (listc == null) {
+				return;
+			}
+			i = 1;
+			view.setLog(null);
+			for (; i <= 10; i++) {
+				if (runMap.get(i) == null) {
+					continue;
+				}
+				if (runMap.get(i) == 1) {
+					uploadCard(deviceMap.get(i), listc);
+					continue;
+				}
+				;
+				if (runMap.get(i) == 2) {
+					delete(deviceMap.get(i), listc);
+					continue;
+				}
+				;
+				if (runMap.get(i) == 3) {
+					count(deviceMap.get(i), listc);
+					continue;
+				}
+				;
+				if (runMap.get(i) == 4) {
+					deviceInit(deviceMap.get(i), listc);
+					continue;
+				}
+				;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -174,13 +204,13 @@ public class MainPresenter {
 
 	// 下载
 	protected void uploadCard(String string, List<Card> listc2) {
-		for (Card card : listc2) {
-			Task t = new Task();
-			t.setIp(string);
-			t.setCard(card);
-			t.setStatustype(privilegeType.waitupload.name());
-			td.save(t);
-		}
+//		for (Card card : listc2) {
+//			Task t = new Task();
+//			t.setIp(string);
+//			t.setCard(card);
+//			t.setStatustype(privilegeType.waitupload.name());
+//			td.save(t);
+//		}
 		new Thread(new Upload(string)).start();
 
 	}
@@ -204,22 +234,27 @@ public class MainPresenter {
 		public void run() {
 			view.setLog(ip+"开始下载权限");
 			List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitupload);
-
+			int i=1;
 			for (Task t : findTaskList) {
+				System.out.println(ip+"==="+t.getCard().getUploadno());
 				byte[] send = client.send(ip, t.getCard().getUploadno());
 				boolean flag = checkUploadMsg(send);
-				if (flag) {
-					t.setStatustype(privilegeType.uploaded.name());
-				} else {
-					t.setStatustype(privilegeType.unupload.name());
-				}
-				td.attachDirty(t);
+				System.out.println(ip+"开始下载权限"+i+"=="+flag);
+				i++;
+//				if (flag) {
+//					t.setStatustype(privilegeType.uploaded.name());
+//				} else {
+//					t.setStatustype(privilegeType.unupload.name());
+//				}
+//				td.attachDirty(t);
 			}
 			view.setLog(ip+"下载权限完成");
 		}
 
 		private boolean checkUploadMsg(byte[] send) {
-			// TODO 自动生成的方法存根
+			if(send[9]==79){
+				return true;
+			}
 			return false;
 		}
 
