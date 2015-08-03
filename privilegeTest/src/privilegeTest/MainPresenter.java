@@ -265,12 +265,16 @@ public class MainPresenter {
 					td.attachDirty(t);
 				}
 			} catch (Exception e) {
+				setLog(e.toString());
 				e.printStackTrace();
 			}
 			view.setLog(ip + "下载权限完成,下载了" + i + "条权限");
 		}
 
 		private boolean checkUploadMsg(String send) {
+			if(send==null){
+				return false;
+			}
 			String substring = send.substring(25, 27);
 			if (substring.equals("79")) {
 				return true;
@@ -290,26 +294,34 @@ public class MainPresenter {
 
 		@Override
 		public void run() {
-			view.setLog(ip + "开始删除权限");
-			int i=0;
-			List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitdelete);
-			for (Task t : findTaskList) {
-				String replaceAll = t.getCard().getDeleteno().replaceAll(" ", "");
-				String send = client.send(ip, replaceAll);
-				boolean flag = checkDeleteMsg(send);
-				if (flag) {
-					t.setStatustype(privilegeType.deleteed.name());
-					i++;
-				} else {
-					t.setStatustype(privilegeType.undelete.name());
+			try {
+				view.setLog(ip + "开始删除权限");
+				int i=0;
+				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitdelete);
+				for (Task t : findTaskList) {
+					String replaceAll = t.getCard().getDeleteno().replaceAll(" ", "");
+					String send = client.send(ip, replaceAll);
+					boolean flag = checkDeleteMsg(send);
+					if (flag) {
+						t.setStatustype(privilegeType.deleteed.name());
+						i++;
+					} else {
+						t.setStatustype(privilegeType.undelete.name());
+					}
+					td.attachDirty(t);
 				}
-				td.attachDirty(t);
+				setLog(ip + "删除权限完成,删除了" + i + "条权限");
+			} catch (Exception e) {
+				setLog(e.toString());
+				e.printStackTrace();
 			}
-			setLog(ip + "删除权限完成,删除了" + i + "条权限");
 		}
 
 		// 判断是否成功
 		private boolean checkDeleteMsg(String send) {
+			if(send==null){
+				return false;
+			}
 			String substring = send.substring(25, 27);
 			if (substring.equals("79")) {
 				return true;
@@ -333,18 +345,25 @@ public class MainPresenter {
 		@Override
 		public void run() {
 
-			for (Card c : list) {
-				String send = client.send(ip, c.getSearchno().replaceAll(" ", ""));
-				boolean flag = checkSearchMsg(send);
-				if (!flag) {
-					noList.add(c);
+			try {
+				for (Card c : list) {
+					String send = client.send(ip, c.getSearchno().replaceAll(" ", ""));
+					boolean flag = checkSearchMsg(send);
+					if (!flag) {
+						noList.add(c);
+					}
 				}
+				view.setLog(ip + "对比完成，有" + noList.size() + "张卡片没有，\n" + noList);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			view.setLog(ip + "对比完成，有" + noList.size() + "张卡片没有，\n" + noList);
 
 		}
 
 		private boolean checkSearchMsg(String send) {
+			if (send==null) {
+				return false;
+			}
 			return !send.contains("FF FF FF FF FF FF FF FF");
 		}
 
@@ -361,19 +380,24 @@ public class MainPresenter {
 	// 读数
 	public void summayAllDevice() {
 
-		Map<Integer, Integer> nums = new HashMap<Integer, Integer>();
-		for (int i = 1; i < 11; i++) {
-			MainClient client = new MainClient();
-			String string = deviceMap.get(i);
-			String send = client.send(string, getCountPrivilegeMsg().replaceAll(" ", ""));
-			if (send == null) {
-				nums.put(i, null);
-				continue;
+		try {
+			Map<Integer, Integer> nums = new HashMap<Integer, Integer>();
+			for (int i = 1; i < 11; i++) {
+				MainClient client = new MainClient();
+				String string = deviceMap.get(i);
+				String send = client.send(string, getCountPrivilegeMsg().replaceAll(" ", ""));
+				if (send == null) {
+					nums.put(i, null);
+					continue;
+				}
+				int no = checkCountPrivilegeReturn(send);
+				nums.put(i, no);
 			}
-			int no = checkCountPrivilegeReturn(send);
-			nums.put(i, no);
+			view.setNumText(nums.get(1), nums.get(2), nums.get(3), nums.get(4), nums.get(5), nums.get(6), nums.get(7), nums.get(8), nums.get(9), nums.get(10));
+		} catch (Exception e) {
+			setLog(e.toString());
+			e.printStackTrace();
 		}
-		view.setNumText(nums.get(1), nums.get(2), nums.get(3), nums.get(4), nums.get(5), nums.get(6), nums.get(7), nums.get(8), nums.get(9), nums.get(10));
 
 	}
 
