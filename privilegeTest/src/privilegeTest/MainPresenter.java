@@ -112,40 +112,42 @@ public class MainPresenter {
 	int i;
 
 	public void run() {
-		try {
-			listc = cd.findAll();
-			if (listc == null) {
-				return;
-			}
-			i = 1;
-			for (; i <= 10; i++) {
-				if (runMap.get(i) == null) {
-					continue;
-				}
-				if (runMap.get(i) == 1) {
-					uploadCard(deviceMap.get(i), listc);
-					continue;
-				}
-				;
-				if (runMap.get(i) == 2) {
-					delete(deviceMap.get(i), listc);
-					continue;
-				}
-				;
-				if (runMap.get(i) == 3) {
-					count(deviceMap.get(i), listc);
-					continue;
-				}
-				;
-				if (runMap.get(i) == 4) {
-					deviceInit(deviceMap.get(i), listc);
-					continue;
-				}
-				;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		view.setLog("qqqqq");
+//		try {
+//			listc = cd.findAll();
+//			if (listc == null) {
+//				return;
+//			}
+//			i = 1;
+//			view.setLog(null);
+//			for (; i <= 10; i++) {
+//				if (runMap.get(i) == null) {
+//					continue;
+//				}
+//				if (runMap.get(i) == 1) {
+//					uploadCard(deviceMap.get(i), listc);
+//					continue;
+//				}
+//				;
+//				if (runMap.get(i) == 2) {
+//					delete(deviceMap.get(i), listc);
+//					continue;
+//				}
+//				;
+//				if (runMap.get(i) == 3) {
+//					count(deviceMap.get(i), listc);
+//					continue;
+//				}
+//				;
+//				if (runMap.get(i) == 4) {
+//					deviceInit(deviceMap.get(i), listc);
+//					continue;
+//				}
+//				;
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -161,7 +163,7 @@ public class MainPresenter {
 
 	// 对比
 	private void count(String string, List<Card> listc2) {
-		
+		new Thread(new Count(string,listc2)).start();
 	}
 
 	// 删除
@@ -200,6 +202,7 @@ public class MainPresenter {
 
 		@Override
 		public void run() {
+			view.setLog(ip+"开始下载权限");
 			List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitupload);
 
 			for (Task t : findTaskList) {
@@ -212,6 +215,7 @@ public class MainPresenter {
 				}
 				td.attachDirty(t);
 			}
+			view.setLog(ip+"下载权限完成");
 		}
 
 		private boolean checkUploadMsg(byte[] send) {
@@ -270,6 +274,7 @@ public class MainPresenter {
 					noList.add(c);
 				}
 			}
+			view.setLog(ip+"对比完成"+noList);
 
 		}
 

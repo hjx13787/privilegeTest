@@ -119,6 +119,12 @@ public class Card  implements java.io.Serializable {
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
     }
+
+	@Override
+	public String toString() {
+		// TODO 自动生成的方法存根2015年8月3日，Michael
+		return "[id="+cid+",card="+identifire+"]";
+	}
    
 
 

@@ -745,10 +745,16 @@ public class MainView {
 		}
 	}
 	
-	public void setLog(String log){
-		if(log==null){
-			text_21.setText("");
-		}
-		text_21.append(log);
+	public void setLog(final String log){
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				if(log==null){
+					text_21.setText("");
+				}
+				text_21.append(log+"\n");
+			}
+		});
+		
 	}
 }
