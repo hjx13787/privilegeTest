@@ -127,11 +127,11 @@ public class MainPresenter{
 	}
 
 	public void go() {
-		// boolean init = new BaseDao().init();
+		boolean init = new BaseDao().init();
 		try {
 			listc = cd.findAll();
 		} catch (Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

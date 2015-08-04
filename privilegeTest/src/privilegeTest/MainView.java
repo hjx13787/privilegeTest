@@ -107,6 +107,11 @@ public class MainView {
 
 		Composite composite = new Composite(shell, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
+		
+		Group group_2 = new Group(composite, SWT.NONE);
+		GridData gd_group_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_group_2.exclude = true;
+		group_2.setLayoutData(gd_group_2);
 
 		Group group = new Group(composite, SWT.NONE);
 		group.setText("\u521D\u59CB\u5316\u5361\u7247");
@@ -227,7 +232,7 @@ public class MainView {
 		label_1.setText("02");
 
 		text_2 = new Text(composite_5, SWT.BORDER);
-		text_2.setText("2");
+		text_2.setText("192.168.1.0");
 		GridData gd_text_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_text_2.widthHint = 87;
 		text_2.setLayoutData(gd_text_2);
@@ -285,7 +290,7 @@ public class MainView {
 		label_2.setText("03");
 
 		text_4 = new Text(composite_6, SWT.BORDER);
-		text_4.setText("3");
+		text_4.setText("192.168.1.0");
 		GridData gd_text_4 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_text_4.widthHint = 87;
 		text_4.setLayoutData(gd_text_4);
@@ -343,7 +348,7 @@ public class MainView {
 		label_3.setText("04");
 
 		text_6 = new Text(composite_7, SWT.BORDER);
-		text_6.setText("4");
+		text_6.setText("192.168.1.0");
 		GridData gd_text_6 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_text_6.widthHint = 87;
 		text_6.setLayoutData(gd_text_6);
@@ -401,7 +406,7 @@ public class MainView {
 		label_4.setText("05");
 
 		text_8 = new Text(composite_8, SWT.BORDER);
-		text_8.setText("5");
+		text_8.setText("192.168.1.0");
 		GridData gd_text_8 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_text_8.widthHint = 87;
 		text_8.setLayoutData(gd_text_8);
@@ -459,7 +464,7 @@ public class MainView {
 		label_5.setText("06");
 
 		text_10 = new Text(composite_9, SWT.BORDER);
-		text_10.setText("6");
+		text_10.setText("192.168.1.0");
 		GridData gd_text_10 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_text_10.widthHint = 87;
 		text_10.setLayoutData(gd_text_10);
@@ -516,7 +521,7 @@ public class MainView {
 		label_6.setText("07");
 
 		text_12 = new Text(composite_10, SWT.BORDER);
-		text_12.setText("7");
+		text_12.setText("192.168.1.0");
 		GridData gd_text_12 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_text_12.widthHint = 87;
 		text_12.setLayoutData(gd_text_12);
@@ -573,7 +578,7 @@ public class MainView {
 		label_7.setText("08");
 
 		text_14 = new Text(composite_11, SWT.BORDER);
-		text_14.setText("8");
+		text_14.setText("192.168.1.0");
 		GridData gd_text_14 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_text_14.widthHint = 87;
 		text_14.setLayoutData(gd_text_14);
@@ -630,7 +635,7 @@ public class MainView {
 		label_8.setText("09");
 
 		text_16 = new Text(composite_12, SWT.BORDER);
-		text_16.setText("9");
+		text_16.setText("192.168.1.0");
 		GridData gd_text_16 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_text_16.widthHint = 87;
 		text_16.setLayoutData(gd_text_16);
@@ -687,7 +692,7 @@ public class MainView {
 		label_9.setText("10");
 
 		text_18 = new Text(composite_13, SWT.BORDER);
-		text_18.setText("0");
+		text_18.setText("192.168.1.0");
 		GridData gd_text_18 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_text_18.widthHint = 87;
 		text_18.setLayoutData(gd_text_18);

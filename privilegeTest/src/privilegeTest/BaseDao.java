@@ -49,6 +49,7 @@ public class BaseDao {
 	    if(file.exists()){
 		return true;
 	    }
+	    file.createNewFile();
 	    String dbURL = "jdbc:sqlserver://192.168.1.45:1433; DatabaseName=master";
 	    dbConn = DriverManager.getConnection(dbURL, userName, userPwd);
 	    sql = dbConn.createStatement();
@@ -56,7 +57,7 @@ public class BaseDao {
 	   sql.execute("use privilegetest create table card(cid bigint PRIMARY KEY identity(1,1),identifire varchar(16),uploadno varchar(160),[deleteno] varchar(160),searchno varchar(160))");
 	   sql.execute("use privilegetest create table [task](id bigint PRIMARY KEY identity(1,1),cid bigint,ip varchar(160),[statustype] varchar(160))");
 	   sql.execute("ALTER TABLE [task] ADD CONSTRAINT main_id_cons FOREIGN KEY (cid) REFERENCES card ON DELETE CASCADE");
-	   file.createNewFile();
+	   
 	   return true;
 	} catch (Exception e) {
 	    e.printStackTrace();
