@@ -803,7 +803,9 @@ public class MainView {
 		composite_14.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		
 		text_32 = new Text(composite_14, SWT.BORDER | SWT.V_SCROLL);
-		text_32.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_text_32 = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_text_32.heightHint = 386;
+		text_32.setLayoutData(gd_text_32);
 		
 		Button button_42 = new Button(composite_14, SWT.NONE);
 		button_42.addSelectionListener(new SelectionAdapter() {

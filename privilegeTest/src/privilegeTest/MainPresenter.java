@@ -260,7 +260,7 @@ public class MainPresenter{
 				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitupload);
 				for (Task t : findTaskList) {
 					if (!runstatus) {
-						return;
+						break;
 					}
 					j++;
 					String uploadno = t.getCard().getUploadno();
@@ -318,7 +318,7 @@ public class MainPresenter{
 				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitdelete);
 				for (Task t : findTaskList) {
 					if (!runstatus) {
-						return;
+						break;
 					}
 					j++;
 					String replaceAll = t.getCard().getDeleteno().replaceAll(" ", "");
@@ -377,7 +377,7 @@ public class MainPresenter{
 				int i = 0;
 				for (Card c : list) {
 					if (!runstatus) {
-						return;
+						break;
 					}
 					i++;
 					String send = client.send(ip, c.getSearchno().replaceAll(" ", ""));
