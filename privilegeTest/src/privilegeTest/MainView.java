@@ -1,5 +1,7 @@
 package privilegeTest;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -13,15 +15,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 
 public class MainView {
 	private MainPresenter presenter = new MainPresenter();
+	Map<Integer, Text> textMap=new HashMap<Integer, Text>();
 	protected Shell shell;
 	private Text text;
 	private Text text_1;
@@ -45,6 +47,17 @@ public class MainView {
 	private Text text_19;
 	private Text text_20;
 	private Text text_21;
+	private Text text_22;
+	private Text text_23;
+	private Text text_24;
+	private Text text_25;
+	private Text text_26;
+	private Text text_27;
+	private Text text_28;
+	private Text text_29;
+	private Text text_30;
+	private Text text_31;
+	private Text text_32;
 
 	/**
 	 * Launch the application.
@@ -52,12 +65,17 @@ public class MainView {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		try {
-			MainView window = new MainView();
-			window.open();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Display display = Display.getDefault();
+		Realm.runWithDefault(SWTObservables.getRealm(display), new Runnable() {
+			public void run() {
+				try {
+					MainView window = new MainView();
+					window.open();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**
@@ -81,7 +99,7 @@ public class MainView {
 	protected void createContents() {
 		presenter.go();
 		shell = new Shell();
-		shell.setSize(687, 684);
+		shell.setSize(745, 684);
 		shell.setText("\u4E1C\u9646\u6743\u9650\u6D4B\u8BD5");
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 
@@ -125,20 +143,20 @@ public class MainView {
 		button_41.setText("\u6E05\u9664");
 
 		Composite composite_2 = new Composite(composite, SWT.NONE);
-		composite_2.setLayout(new GridLayout(1, false));
-		GridData gd_composite_2 = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+		composite_2.setLayout(new GridLayout(2, false));
+		GridData gd_composite_2 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_composite_2.heightHint = 443;
 		composite_2.setLayoutData(gd_composite_2);
 
 		Composite composite_4 = new Composite(composite_2, SWT.NONE);
 		composite_4.setLayout(new GridLayout(1, false));
-		GridData gd_composite_4 = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		GridData gd_composite_4 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_composite_4.heightHint = 448;
 		composite_4.setLayoutData(gd_composite_4);
 
 		Composite composite_1 = new Composite(composite_4, SWT.NONE);
-		composite_1.setLayout(new GridLayout(7, false));
-		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		composite_1.setLayout(new GridLayout(8, false));
+		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_composite_1.heightHint = 30;
 		gd_composite_1.widthHint = 117;
 		composite_1.setLayoutData(gd_composite_1);
@@ -193,10 +211,14 @@ public class MainView {
 		text_1 = new Text(composite_1, SWT.BORDER);
 		text_1.setEnabled(false);
 		text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_22 = new Text(composite_1, SWT.BORDER);
+		text_22.setEnabled(false);
+		text_22.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_5 = new Composite(composite_4, SWT.NONE);
 		composite_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_5.setLayout(new GridLayout(7, false));
+		composite_5.setLayout(new GridLayout(8, false));
 
 		Label label_1 = new Label(composite_5, SWT.NONE);
 		label_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -247,10 +269,14 @@ public class MainView {
 		text_3 = new Text(composite_5, SWT.BORDER);
 		text_3.setEnabled(false);
 		text_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_23 = new Text(composite_5, SWT.BORDER);
+		text_23.setEnabled(false);
+		text_23.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_6 = new Composite(composite_4, SWT.NONE);
 		composite_6.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_6.setLayout(new GridLayout(7, false));
+		composite_6.setLayout(new GridLayout(8, false));
 
 		Label label_2 = new Label(composite_6, SWT.NONE);
 		label_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -301,10 +327,14 @@ public class MainView {
 		text_5 = new Text(composite_6, SWT.BORDER);
 		text_5.setEnabled(false);
 		text_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_24 = new Text(composite_6, SWT.BORDER);
+		text_24.setEnabled(false);
+		text_24.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_7 = new Composite(composite_4, SWT.NONE);
 		composite_7.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_7.setLayout(new GridLayout(7, false));
+		composite_7.setLayout(new GridLayout(8, false));
 
 		Label label_3 = new Label(composite_7, SWT.NONE);
 		label_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -355,10 +385,14 @@ public class MainView {
 		text_7 = new Text(composite_7, SWT.BORDER);
 		text_7.setEnabled(false);
 		text_7.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_25 = new Text(composite_7, SWT.BORDER);
+		text_25.setEnabled(false);
+		text_25.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_8 = new Composite(composite_4, SWT.NONE);
 		composite_8.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_8.setLayout(new GridLayout(7, false));
+		composite_8.setLayout(new GridLayout(8, false));
 
 		Label label_4 = new Label(composite_8, SWT.NONE);
 		label_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -409,10 +443,14 @@ public class MainView {
 		text_9 = new Text(composite_8, SWT.BORDER);
 		text_9.setEnabled(false);
 		text_9.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_26 = new Text(composite_8, SWT.BORDER);
+		text_26.setEnabled(false);
+		text_26.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_9 = new Composite(composite_4, SWT.NONE);
 		composite_9.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_9.setLayout(new GridLayout(7, false));
+		composite_9.setLayout(new GridLayout(8, false));
 
 		Label label_5 = new Label(composite_9, SWT.NONE);
 		label_5.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -463,9 +501,13 @@ public class MainView {
 		text_11 = new Text(composite_9, SWT.BORDER);
 		text_11.setEnabled(false);
 		text_11.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_27 = new Text(composite_9, SWT.BORDER);
+		text_27.setEnabled(false);
+		text_27.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_10 = new Composite(composite_4, SWT.NONE);
-		composite_10.setLayout(new GridLayout(7, false));
+		composite_10.setLayout(new GridLayout(8, false));
 
 		Label label_6 = new Label(composite_10, SWT.NONE);
 		label_6.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -516,9 +558,13 @@ public class MainView {
 		text_13 = new Text(composite_10, SWT.BORDER);
 		text_13.setEnabled(false);
 		text_13.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_28 = new Text(composite_10, SWT.BORDER);
+		text_28.setEnabled(false);
+		text_28.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_11 = new Composite(composite_4, SWT.NONE);
-		composite_11.setLayout(new GridLayout(7, false));
+		composite_11.setLayout(new GridLayout(8, false));
 
 		Label label_7 = new Label(composite_11, SWT.NONE);
 		label_7.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -569,9 +615,13 @@ public class MainView {
 		text_15 = new Text(composite_11, SWT.BORDER);
 		text_15.setEnabled(false);
 		text_15.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_29 = new Text(composite_11, SWT.BORDER);
+		text_29.setEnabled(false);
+		text_29.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_12 = new Composite(composite_4, SWT.NONE);
-		composite_12.setLayout(new GridLayout(7, false));
+		composite_12.setLayout(new GridLayout(8, false));
 
 		Label label_8 = new Label(composite_12, SWT.NONE);
 		label_8.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -622,9 +672,13 @@ public class MainView {
 		text_17 = new Text(composite_12, SWT.BORDER);
 		text_17.setEnabled(false);
 		text_17.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_30 = new Text(composite_12, SWT.BORDER);
+		text_30.setEnabled(false);
+		text_30.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_13 = new Composite(composite_4, SWT.NONE);
-		composite_13.setLayout(new GridLayout(7, false));
+		composite_13.setLayout(new GridLayout(8, false));
 
 		Label label_9 = new Label(composite_13, SWT.NONE);
 		label_9.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -675,6 +729,10 @@ public class MainView {
 		text_19 = new Text(composite_13, SWT.BORDER);
 		text_19.setEnabled(false);
 		text_19.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		text_31 = new Text(composite_13, SWT.BORDER);
+		text_31.setEnabled(false);
+		text_31.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Group group_1 = new Group(composite_4, SWT.NONE);
 		group_1.setLayout(new GridLayout(2, false));
@@ -716,21 +774,53 @@ public class MainView {
 				deviceMap.put(8, text_14.getText());
 				deviceMap.put(9, text_16.getText());
 				deviceMap.put(10, text_18.getText());
+				setNumText("Ê§°Ü","Ê§°Ü","Ê§°Ü","Ê§°Ü","Ê§°Ü","Ê§°Ü","Ê§°Ü","Ê§°Ü","Ê§°Ü","Ê§°Ü");
 				presenter.summayAllDevice();
 			}
 		});
 		btnNewButton.setText("\u8BFB\u6570");
+		
+		Composite composite_14 = new Composite(composite_2, SWT.NONE);
+		composite_14.setLayout(new GridLayout(1, false));
+		composite_14.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		
+		text_32 = new Text(composite_14, SWT.BORDER | SWT.V_SCROLL);
+		text_32.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		Button button_42 = new Button(composite_14, SWT.NONE);
+		button_42.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.setCardList();
+			}
+		});
+		button_42.setText("\u5237\u65B0");
 						
 								Composite composite_3 = new Composite(composite, SWT.NONE);
 								composite_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 										composite_3.setLayout(new GridLayout(1, false));
 								
-										text_21 = new Text(composite_3, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+										text_21 = new Text(composite_3, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 										GridData gd_text_21 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 										gd_text_21.heightHint = 114;
 										text_21.setLayoutData(gd_text_21);
 		presenter.setView(this);
+		initTextMap();
 
+	}
+
+	private void initTextMap() {
+		textMap.put(1, text_22);
+		textMap.put(2, text_23);
+		textMap.put(3, text_24);
+		textMap.put(4, text_25);
+		textMap.put(5, text_26);
+		textMap.put(6, text_27);
+		textMap.put(7, text_28);
+		textMap.put(8, text_29);
+		textMap.put(9, text_30);
+		textMap.put(10, text_31);
+		
 	}
 
 	public void setNumText(Object... strings) {
@@ -759,6 +849,44 @@ public class MainView {
 					return;
 				}
 				text_21.append(log+"\n");
+			}
+		});
+		
+	}
+	
+	public void setText22(final String msg){
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				text_22.setText(msg);
+			}
+		});
+		
+	}
+
+	public Text getText_22() {
+		return text_22;
+	}
+
+	public void setText(final int num, final int i) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				textMap.get(num).setText(i+"");
+			}
+		});
+		
+	}
+
+	public void setCardList(final List<Card> listc) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				StringBuilder sb=new StringBuilder();
+				for (Card card : listc) {
+					sb.append(card.getIdentifire().toUpperCase()+"\n");
+				}
+				text_32.setText(sb.toString());
 			}
 		});
 		

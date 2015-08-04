@@ -1,21 +1,19 @@
 package privilegeTest;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import privilegeTest.mina.MainClient;
+import privilegeTest.util.BasicJavaBeanModel;
 import privilegeTest.util.ByteUtils;
 import privilegeTest.util.Utils;
 
-public class MainPresenter {
+public class MainPresenter{
 	CardDAO cd = new CardDAO();
 	TaskDAO td = new TaskDAO();
 	Map<String, String> mapcard = new HashMap<String, String>();
@@ -48,6 +46,7 @@ public class MainPresenter {
 		}
 		saveCard();
 		setLog("初始化卡片完成");
+		setCardList();
 	}
 
 	private void setLog(String string) {
@@ -72,9 +71,9 @@ public class MainPresenter {
 			for (Card c : list) {
 				cd.save(c);
 			}
-			listc = cd.findAll();
+			setListc(cd.findAll());
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
@@ -123,15 +122,16 @@ public class MainPresenter {
 
 	public void clearCard() {
 		cd.deleteCardAll();
-
+		setListc(new ArrayList<Card>());
+		setCardList();
 	}
 
 	public void go() {
-//		boolean init = new BaseDao().init();
+		// boolean init = new BaseDao().init();
 		try {
 			listc = cd.findAll();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
@@ -161,17 +161,17 @@ public class MainPresenter {
 					continue;
 				}
 				if (runMap.get(i) == 1) {
-					uploadCard(deviceMap.get(i), listc);
+					uploadCard(i, listc);
 					continue;
 				}
 				;
 				if (runMap.get(i) == 2) {
-					delete(deviceMap.get(i), listc);
+					delete(i, listc);
 					continue;
 				}
 				;
 				if (runMap.get(i) == 3) {
-					count(deviceMap.get(i), listc);
+					count(i, listc);
 					continue;
 				}
 				;
@@ -182,7 +182,7 @@ public class MainPresenter {
 				;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 
 	}
@@ -203,18 +203,22 @@ public class MainPresenter {
 	}
 
 	// 对比
-	private void count(String string, List<Card> listc2) {
-		new Thread(new Count(string, listc2)).start();
+	private void count(int i, List<Card> listc2) {
+		new Thread(new Count(i, listc2)).start();
 	}
 
 	// 删除
-	private void delete(String string, List<Card> listc2) {
+	private void delete(int i, List<Card> listc2) {
+		String string = deviceMap.get(i);
+
 		td.deleteTask(string);
-		new Thread(new Delete(string)).start();
+		new Thread(new Delete(i)).start();
 	}
 
 	// 下载
-	protected void uploadCard(String string, List<Card> listc2) {
+	protected void uploadCard(int i, List<Card> listc2) {
+		String string = deviceMap.get(i);
+
 		td.deleteTaskAll(string);
 		for (Card card : listc2) {
 			Task t = new Task();
@@ -223,7 +227,7 @@ public class MainPresenter {
 			t.setStatustype(privilegeType.waitupload.name());
 			td.save(t);
 		}
-		new Thread(new Upload(string)).start();
+		new Thread(new Upload(i)).start();
 
 	}
 
@@ -235,23 +239,27 @@ public class MainPresenter {
 		this.runMap = runMap;
 	}
 
+	// 下载
 	public class Upload implements Runnable {
 		String ip;
 		MainClient client = new MainClient();
+		int num;
+		List<Card> list = new ArrayList<Card>();
 
-		Upload(String ip) {
-			this.ip = ip;
+		Upload(int ip) {
+			num = ip;
+			this.ip = deviceMap.get(i);
 		}
 
 		@Override
 		public void run() {
 			view.setLog(ip + "开始下载权限");
 			int i = 0;
+			int j = 0;
 			try {
 				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitupload);
-				System.out.println(findTaskList.size());
-				
 				for (Task t : findTaskList) {
+					j++;
 					String uploadno = t.getCard().getUploadno();
 					String replaceAll = uploadno.replaceAll(" ", "");
 					String send = client.send(ip, replaceAll);
@@ -261,18 +269,20 @@ public class MainPresenter {
 						i++;
 					} else {
 						t.setStatustype(privilegeType.unupload.name());
+						list.add(t.getCard());
 					}
 					td.attachDirty(t);
+					view.setText(num, j);
 				}
 			} catch (Exception e) {
 				setLog(e.toString());
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
-			view.setLog(ip + "下载权限完成,下载了" + i + "条权限");
+			view.setLog(ip + "下载权限完成,下载了" + i + "条权限,有" + list.size() + "条下载失败\n" + list);
 		}
 
 		private boolean checkUploadMsg(String send) {
-			if(send==null){
+			if (send == null) {
 				return false;
 			}
 			String substring = send.substring(25, 27);
@@ -284,21 +294,27 @@ public class MainPresenter {
 
 	}
 
+	// 删除
 	public class Delete implements Runnable {
 		String ip;
 		MainClient client = new MainClient();
+		List<Card> list = new ArrayList<Card>();
+		int num;
 
-		Delete(String ip) {
-			this.ip = ip;
+		Delete(int i) {
+			num = i;
+			this.ip = deviceMap.get(i);
 		}
 
 		@Override
 		public void run() {
 			try {
 				view.setLog(ip + "开始删除权限");
-				int i=0;
+				int i = 0;
+				int j = 0;
 				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitdelete);
 				for (Task t : findTaskList) {
+					j++;
 					String replaceAll = t.getCard().getDeleteno().replaceAll(" ", "");
 					String send = client.send(ip, replaceAll);
 					boolean flag = checkDeleteMsg(send);
@@ -307,19 +323,21 @@ public class MainPresenter {
 						i++;
 					} else {
 						t.setStatustype(privilegeType.undelete.name());
+						list.add(t.getCard());
 					}
 					td.attachDirty(t);
+					view.setText(num, j);
 				}
-				setLog(ip + "删除权限完成,删除了" + i + "条权限");
+				setLog(ip + "删除权限完成,删除了" + i + "条权限,有" + list.size() + "条删除失败\n" + list);
 			} catch (Exception e) {
 				setLog(e.toString());
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 
 		// 判断是否成功
 		private boolean checkDeleteMsg(String send) {
-			if(send==null){
+			if (send == null) {
 				return false;
 			}
 			String substring = send.substring(25, 27);
@@ -331,14 +349,17 @@ public class MainPresenter {
 
 	}
 
+	// 对比
 	public class Count implements Runnable {
 		String ip;
 		List<Card> list;
 		List<Card> noList = new ArrayList<Card>();
 		MainClient client = new MainClient();
+		int num;
 
-		Count(String ip, List<Card> list) {
-			this.ip = ip;
+		Count(int i, List<Card> list) {
+			num=i;
+			this.ip = deviceMap.get(i);
 			this.list = list;
 		}
 
@@ -346,22 +367,26 @@ public class MainPresenter {
 		public void run() {
 
 			try {
+				view.setLog(ip + "开始对比" );
+				int i = 0;
 				for (Card c : list) {
+					i++;
 					String send = client.send(ip, c.getSearchno().replaceAll(" ", ""));
 					boolean flag = checkSearchMsg(send);
 					if (!flag) {
 						noList.add(c);
 					}
+					view.setText(num, i);
 				}
 				view.setLog(ip + "对比完成，有" + noList.size() + "张卡片没有，\n" + noList);
 			} catch (Exception e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 
 		}
 
 		private boolean checkSearchMsg(String send) {
-			if (send==null) {
+			if (send == null) {
 				return false;
 			}
 			return !send.contains("FF FF FF FF FF FF FF FF");
@@ -379,24 +404,29 @@ public class MainPresenter {
 
 	// 读数
 	public void summayAllDevice() {
-
+		setLog(null);
+		view.setNumText("失败", "失败", "失败", "失败", "失败", "失败", "失败", "失败", "失败", "失败");
 		try {
-			Map<Integer, Integer> nums = new HashMap<Integer, Integer>();
+			Map<Integer, Object> nums = new HashMap<Integer, Object>();
 			for (int i = 1; i < 11; i++) {
+
 				MainClient client = new MainClient();
 				String string = deviceMap.get(i);
+				setLog(string + "开始读数");
 				String send = client.send(string, getCountPrivilegeMsg().replaceAll(" ", ""));
 				if (send == null) {
-					nums.put(i, null);
+					nums.put(i, "失败");
+					setLog(string + "读数完成");
 					continue;
 				}
 				int no = checkCountPrivilegeReturn(send);
 				nums.put(i, no);
+				setLog(string + "读数完成");
 			}
 			view.setNumText(nums.get(1), nums.get(2), nums.get(3), nums.get(4), nums.get(5), nums.get(6), nums.get(7), nums.get(8), nums.get(9), nums.get(10));
 		} catch (Exception e) {
 			setLog(e.toString());
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 
 	}
@@ -419,5 +449,10 @@ public class MainPresenter {
 
 	public void setView(MainView view) {
 		this.view = view;
+	}
+
+	public void setCardList() {
+		view.setCardList(listc);
+		
 	}
 }

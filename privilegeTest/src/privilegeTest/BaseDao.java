@@ -10,7 +10,7 @@ import java.sql.Statement;
 public class BaseDao {
     static final String fileName="c://privilegeTest.temp";
     String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    String dbURL = "jdbc:sqlserver://localhost:1433; DatabaseName=privilegetest"; // 连接服务器和数据库sample
+    String dbURL = "jdbc:sqlserver://192.168.1.45:1433; DatabaseName=privilegetest"; // 连接服务器和数据库sample
 
     String userName = "sa"; // 默认用户名
 
@@ -49,7 +49,7 @@ public class BaseDao {
 	    if(file.exists()){
 		return true;
 	    }
-	    String dbURL = "jdbc:sqlserver://localhost:1433; DatabaseName=master";
+	    String dbURL = "jdbc:sqlserver://192.168.1.45:1433; DatabaseName=master";
 	    dbConn = DriverManager.getConnection(dbURL, userName, userPwd);
 	    sql = dbConn.createStatement();
 	   sql.execute("create database privilegetest");
