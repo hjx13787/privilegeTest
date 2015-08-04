@@ -18,7 +18,7 @@ public class MainPresenter{
 	TaskDAO td = new TaskDAO();
 	Map<String, String> mapcard = new HashMap<String, String>();
 	String[] nums = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", };
-
+	boolean runstatus=true;
 	public enum privilegeType {
 		waitupload, uploaded, unupload, waitdelete, deleteed, undelete
 	}
@@ -259,6 +259,9 @@ public class MainPresenter{
 			try {
 				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitupload);
 				for (Task t : findTaskList) {
+					if (!runstatus) {
+						return;
+					}
 					j++;
 					String uploadno = t.getCard().getUploadno();
 					String replaceAll = uploadno.replaceAll(" ", "");
@@ -314,6 +317,9 @@ public class MainPresenter{
 				int j = 0;
 				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitdelete);
 				for (Task t : findTaskList) {
+					if (!runstatus) {
+						return;
+					}
 					j++;
 					String replaceAll = t.getCard().getDeleteno().replaceAll(" ", "");
 					String send = client.send(ip, replaceAll);
@@ -370,6 +376,9 @@ public class MainPresenter{
 				view.setLog(ip + "开始对比" );
 				int i = 0;
 				for (Card c : list) {
+					if (!runstatus) {
+						return;
+					}
 					i++;
 					String send = client.send(ip, c.getSearchno().replaceAll(" ", ""));
 					boolean flag = checkSearchMsg(send);
@@ -454,5 +463,13 @@ public class MainPresenter{
 	public void setCardList() {
 		view.setCardList(listc);
 		
+	}
+
+	public boolean isRunstatus() {
+		return runstatus;
+	}
+
+	public void setRunstatus(boolean runstatus) {
+		this.runstatus = runstatus;
 	}
 }

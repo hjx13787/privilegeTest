@@ -58,6 +58,8 @@ public class MainView {
 	private Text text_30;
 	private Text text_31;
 	private Text text_32;
+	private Button button_40;
+	private Button button_43;
 
 	/**
 	 * Launch the application.
@@ -735,14 +737,17 @@ public class MainView {
 		text_31.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Group group_1 = new Group(composite_4, SWT.NONE);
-		group_1.setLayout(new GridLayout(2, false));
+		group_1.setLayout(new GridLayout(3, false));
 		group_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		group_1.setText("\u64CD\u4F5C");
 
-		Button button_40 = new Button(group_1, SWT.NONE);
+		button_40 = new Button(group_1, SWT.NONE);
 		button_40.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				button_40.setEnabled(false);
+				button_43.setEnabled(true);
+				presenter.setRunstatus(true);
 				Map<Integer, String> deviceMap = presenter.getDeviceMap();
 				deviceMap.put(1, text.getText());
 				deviceMap.put(2, text_2.getText());
@@ -755,9 +760,22 @@ public class MainView {
 				deviceMap.put(9, text_16.getText());
 				deviceMap.put(10, text_18.getText());
 				presenter.run();
+				
 			}
 		});
 		button_40.setText("\u8FD0\u884C");
+		
+		button_43 = new Button(group_1, SWT.NONE);
+		button_43.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				button_40.setEnabled(true);
+				button_43.setEnabled(false);
+				presenter.setRunstatus(false);
+			}
+		});
+		button_43.setText("\u505C\u6B62");
+		button_43.setEnabled(false);
 
 		Button btnNewButton = new Button(group_1, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
@@ -882,7 +900,7 @@ public class MainView {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				StringBuilder sb=new StringBuilder();
+				StringBuilder sb=new StringBuilder("сп"+listc.size()+"уе©╗ф╛\n");
 				for (Card card : listc) {
 					sb.append(card.getIdentifire().toUpperCase()+"\n");
 				}
