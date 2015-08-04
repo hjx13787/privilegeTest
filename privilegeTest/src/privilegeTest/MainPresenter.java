@@ -13,12 +13,13 @@ import privilegeTest.util.BasicJavaBeanModel;
 import privilegeTest.util.ByteUtils;
 import privilegeTest.util.Utils;
 
-public class MainPresenter{
+public class MainPresenter {
 	CardDAO cd = new CardDAO();
 	TaskDAO td = new TaskDAO();
 	Map<String, String> mapcard = new HashMap<String, String>();
 	String[] nums = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", };
-	boolean runstatus=true;
+	boolean runstatus = true;
+
 	public enum privilegeType {
 		waitupload, uploaded, unupload, waitdelete, deleteed, undelete
 	}
@@ -73,7 +74,7 @@ public class MainPresenter{
 			}
 			setListc(cd.findAll());
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -182,7 +183,7 @@ public class MainPresenter{
 				;
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 		}
 
 	}
@@ -209,24 +210,24 @@ public class MainPresenter{
 
 	// 删除
 	private void delete(int i, List<Card> listc2) {
-		String string = deviceMap.get(i);
-
-		td.deleteTask(string);
+		// String string = deviceMap.get(i);
+		//
+		// td.deleteTask(string);
 		new Thread(new Delete(i)).start();
 	}
 
 	// 下载
 	protected void uploadCard(int i, List<Card> listc2) {
-		String string = deviceMap.get(i);
-
-		td.deleteTaskAll(string);
-		for (Card card : listc2) {
-			Task t = new Task();
-			t.setIp(string);
-			t.setCard(card);
-			t.setStatustype(privilegeType.waitupload.name());
-			td.save(t);
-		}
+		// String string = deviceMap.get(i);
+		//
+		// td.deleteTaskAll(string);
+		// for (Card card : listc2) {
+		// Task t = new Task();
+		// t.setIp(string);
+		// t.setCard(card);
+		// t.setStatustype(privilegeType.waitupload.name());
+		// td.save(t);
+		// }
 		new Thread(new Upload(i)).start();
 
 	}
@@ -256,30 +257,28 @@ public class MainPresenter{
 			view.setLog(ip + "开始下载权限");
 			int i = 0;
 			int j = 0;
-			try {
-				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitupload);
-				for (Task t : findTaskList) {
-					if (!runstatus) {
-						break;
-					}
+			for (Card c : listc) {
+				if (!runstatus) {
+					break;
+				}
+				try {
 					j++;
-					String uploadno = t.getCard().getUploadno();
+					String uploadno = c.getUploadno();
 					String replaceAll = uploadno.replaceAll(" ", "");
 					String send = client.send(ip, replaceAll);
 					boolean flag = checkUploadMsg(send);
 					if (flag) {
-						t.setStatustype(privilegeType.uploaded.name());
 						i++;
 					} else {
-						t.setStatustype(privilegeType.unupload.name());
-						list.add(t.getCard());
+						list.add(c);
 					}
-					td.attachDirty(t);
-					view.setText(num, j);
+				} catch (Exception e) {
+					setLog(e.toString());
+					list.add(c);
+//					e.printStackTrace();
+					continue;
 				}
-			} catch (Exception e) {
-				setLog(e.toString());
-//				e.printStackTrace();
+				view.setText(num, j);
 			}
 			view.setLog(ip + "下载权限完成,下载了" + i + "条权限,有" + list.size() + "条下载失败\n" + list);
 		}
@@ -311,34 +310,38 @@ public class MainPresenter{
 
 		@Override
 		public void run() {
-			try {
-				view.setLog(ip + "开始删除权限");
-				int i = 0;
-				int j = 0;
-				List<Task> findTaskList = td.findTaskList(ip, privilegeType.waitdelete);
-				for (Task t : findTaskList) {
-					if (!runstatus) {
-						break;
-					}
+			view.setLog(ip + "开始删除权限");
+			int i = 0;
+			int j = 0;
+			// List<Task> findTaskList = td.findTaskList(ip,
+			// privilegeType.waitdelete);
+			for (Card c : listc) {
+				if (!runstatus) {
+					break;
+				}
 					j++;
-					String replaceAll = t.getCard().getDeleteno().replaceAll(" ", "");
+					try {
+					String replaceAll = c.getDeleteno().replaceAll(" ", "");
 					String send = client.send(ip, replaceAll);
 					boolean flag = checkDeleteMsg(send);
 					if (flag) {
-						t.setStatustype(privilegeType.deleteed.name());
+						// t.setStatustype(privilegeType.deleteed.name());
 						i++;
 					} else {
-						t.setStatustype(privilegeType.undelete.name());
-						list.add(t.getCard());
+						// t.setStatustype(privilegeType.undelete.name());
+						list.add(c);
 					}
-					td.attachDirty(t);
-					view.setText(num, j);
+					// td.attachDirty(t);
+					
+				} catch (Exception e) {
+					setLog(e.toString());
+					list.add(c);
+					continue;
+					// e.printStackTrace();
 				}
-				setLog(ip + "删除权限完成,删除了" + i + "条权限,有" + list.size() + "条删除失败\n" + list);
-			} catch (Exception e) {
-				setLog(e.toString());
-//				e.printStackTrace();
+				view.setText(num, j);
 			}
+			setLog(ip + "删除权限完成,删除了" + i + "条权限,有" + list.size() + "条删除失败\n" + list);
 		}
 
 		// 判断是否成功
@@ -364,7 +367,7 @@ public class MainPresenter{
 		int num;
 
 		Count(int i, List<Card> list) {
-			num=i;
+			num = i;
 			this.ip = deviceMap.get(i);
 			this.list = list;
 		}
@@ -372,25 +375,27 @@ public class MainPresenter{
 		@Override
 		public void run() {
 
-			try {
-				view.setLog(ip + "开始对比" );
-				int i = 0;
-				for (Card c : list) {
-					if (!runstatus) {
-						break;
-					}
+			view.setLog(ip + "开始对比");
+			int i = 0;
+			for (Card c : list) {
+				if (!runstatus) {
+					break;
+				}
+				try {
 					i++;
 					String send = client.send(ip, c.getSearchno().replaceAll(" ", ""));
 					boolean flag = checkSearchMsg(send);
 					if (!flag) {
 						noList.add(c);
 					}
-					view.setText(num, i);
+				} catch (Exception e) {
+					setLog(e + "");
+					continue;
+					// e.printStackTrace();
 				}
-				view.setLog(ip + "对比完成，有" + noList.size() + "张卡片没有，\n" + noList);
-			} catch (Exception e) {
-//				e.printStackTrace();
+				view.setText(num, i);
 			}
+			view.setLog(ip + "对比完成，有" + noList.size() + "张卡片没有，\n" + noList);
 
 		}
 
@@ -435,7 +440,7 @@ public class MainPresenter{
 			view.setNumText(nums.get(1), nums.get(2), nums.get(3), nums.get(4), nums.get(5), nums.get(6), nums.get(7), nums.get(8), nums.get(9), nums.get(10));
 		} catch (Exception e) {
 			setLog(e.toString());
-//			e.printStackTrace();
+			// e.printStackTrace();
 		}
 
 	}
@@ -462,7 +467,7 @@ public class MainPresenter{
 
 	public void setCardList() {
 		view.setCardList(listc);
-		
+
 	}
 
 	public boolean isRunstatus() {
