@@ -61,7 +61,7 @@ public class MainClient {
 				}
 				session.getConfig().setUseReadOperation(true);
 				ReadFuture read = session.read();
-				read.awaitUninterruptibly();
+				read.awaitUninterruptibly(800);
 				if (read.getException()!=null) {
 					read.setClosed();
 					read.getException().printStackTrace();
@@ -69,10 +69,9 @@ public class MainClient {
 				}
 				String message = (String)read.getMessage();
 				session.getConfig().setUseReadOperation(false);
-
 			return message;
 		} catch (Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}finally{
 		}

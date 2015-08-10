@@ -31,7 +31,7 @@ public class MainPresenter {
 
 	Map<String, ScheduledFuture> taskMap = new HashMap<String, ScheduledFuture>();
 
-	List<Card> listc = new ArrayList<Card>();
+	private List<Card>  listc = new ArrayList<Card>();
 
 	MainView view;
 
@@ -123,14 +123,14 @@ public class MainPresenter {
 
 	public void clearCard() {
 		cd.deleteCardAll();
-		setListc(new ArrayList<Card>());
+		setListc(cd.findAll());
 		setCardList();
 	}
 
 	public void go() {
 		boolean init = new BaseDao().init();
 		try {
-			listc = cd.findAll();
+			setListc(cd.findAll());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -148,8 +148,8 @@ public class MainPresenter {
 
 	public void run() {
 		try {
-			listc = cd.findAll();
-			if (listc == null) {
+			ArrayList<Card> arrayList = new ArrayList<Card>(getListc());
+			if (arrayList.size()==0) {
 				return;
 			}
 			i = 1;
@@ -162,22 +162,22 @@ public class MainPresenter {
 					continue;
 				}
 				if (runMap.get(i) == 1) {
-					uploadCard(i, listc);
+					uploadCard(i, arrayList);
 					continue;
 				}
 				;
 				if (runMap.get(i) == 2) {
-					delete(i, listc);
+					delete(i, arrayList);
 					continue;
 				}
 				;
 				if (runMap.get(i) == 3) {
-					count(i, listc);
+					count(i, arrayList);
 					continue;
 				}
 				;
 				if (runMap.get(i) == 4) {
-					deviceInit(deviceMap.get(i), listc);
+					deviceInit(deviceMap.get(i), arrayList);
 					continue;
 				}
 				;
@@ -257,15 +257,20 @@ public class MainPresenter {
 			view.setLog(ip + "开始下载权限");
 			int i = 0;
 			int j = 0;
-			for (Card c : listc) {
+			ArrayList<Card> arrayList = new ArrayList<Card>(getListc());
+			for (Card c : arrayList) {
 				if (!runstatus) {
 					break;
 				}
-				try {
+				try{
 					j++;
 					String uploadno = c.getUploadno();
 					String replaceAll = uploadno.replaceAll(" ", "");
 					String send = client.send(ip, replaceAll);
+					while(send==null){
+						client=new MainClient();
+						send = client.send(ip, replaceAll);
+					}
 					boolean flag = checkUploadMsg(send);
 					if (flag) {
 						i++;
@@ -315,7 +320,8 @@ public class MainPresenter {
 			int j = 0;
 			// List<Task> findTaskList = td.findTaskList(ip,
 			// privilegeType.waitdelete);
-			for (Card c : listc) {
+			ArrayList<Card> arrayList = new ArrayList<Card>(getListc());
+			for (Card c : arrayList) {
 				if (!runstatus) {
 					break;
 				}
@@ -323,6 +329,10 @@ public class MainPresenter {
 					try {
 					String replaceAll = c.getDeleteno().replaceAll(" ", "");
 					String send = client.send(ip, replaceAll);
+					while(send==null){
+						client=new MainClient();
+						send = client.send(ip, replaceAll);
+					}
 					boolean flag = checkDeleteMsg(send);
 					if (flag) {
 						// t.setStatustype(privilegeType.deleteed.name());
@@ -384,14 +394,18 @@ public class MainPresenter {
 				try {
 					i++;
 					String send = client.send(ip, c.getSearchno().replaceAll(" ", ""));
+					while(send==null){
+						client=new MainClient();
+						send=client.send(ip, c.getSearchno().replaceAll(" ", ""));
+					}
 					boolean flag = checkSearchMsg(send);
 					if (!flag) {
 						noList.add(c);
 					}
 				} catch (Exception e) {
 					setLog(e + "");
-					continue;
-					// e.printStackTrace();
+					 e.printStackTrace();
+					 continue;
 				}
 				view.setText(num, i);
 			}
@@ -408,11 +422,11 @@ public class MainPresenter {
 
 	}
 
-	public List<Card> getListc() {
+	public synchronized List<Card> getListc() {
 		return listc;
 	}
 
-	public void setListc(List<Card> listc) {
+	public synchronized void setListc(List<Card> listc) {
 		this.listc = listc;
 	}
 
@@ -466,8 +480,8 @@ public class MainPresenter {
 	}
 
 	public void setCardList() {
-		view.setCardList(listc);
-
+		setListc(cd.findAll());
+		view.setCardList(new ArrayList<Card>(getListc()));
 	}
 
 	public boolean isRunstatus() {

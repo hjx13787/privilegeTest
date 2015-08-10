@@ -162,7 +162,7 @@ public class MainView {
 		composite_4.setLayoutData(gd_composite_4);
 
 		Composite composite_1 = new Composite(composite_4, SWT.NONE);
-		composite_1.setLayout(new GridLayout(8, false));
+		composite_1.setLayout(new GridLayout(9, false));
 		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_composite_1.heightHint = 30;
 		gd_composite_1.widthHint = 117;
@@ -214,6 +214,15 @@ public class MainView {
 			}
 		});
 		button_3.setText("\u521D\u59CB\u5316");
+		
+		Button button_44 = new Button(composite_1, SWT.RADIO);
+		button_44.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(1, 5);
+			}
+		});
+		button_44.setText("\u65E0");
 
 		text_1 = new Text(composite_1, SWT.BORDER);
 		text_1.setEnabled(false);
@@ -225,7 +234,7 @@ public class MainView {
 
 		Composite composite_5 = new Composite(composite_4, SWT.NONE);
 		composite_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_5.setLayout(new GridLayout(8, false));
+		composite_5.setLayout(new GridLayout(9, false));
 
 		Label label_1 = new Label(composite_5, SWT.NONE);
 		label_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -272,6 +281,15 @@ public class MainView {
 			}
 		});
 		button_7.setText("\u521D\u59CB\u5316");
+		
+		Button button_45 = new Button(composite_5, SWT.RADIO);
+		button_45.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(2, 5);
+			}
+		});
+		button_45.setText("\u65E0");
 
 		text_3 = new Text(composite_5, SWT.BORDER);
 		text_3.setEnabled(false);
@@ -283,7 +301,7 @@ public class MainView {
 
 		Composite composite_6 = new Composite(composite_4, SWT.NONE);
 		composite_6.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_6.setLayout(new GridLayout(8, false));
+		composite_6.setLayout(new GridLayout(9, false));
 
 		Label label_2 = new Label(composite_6, SWT.NONE);
 		label_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -330,6 +348,15 @@ public class MainView {
 			}
 		});
 		button_11.setText("\u521D\u59CB\u5316");
+		
+		Button button_46 = new Button(composite_6, SWT.RADIO);
+		button_46.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(3, 5);
+			}
+		});
+		button_46.setText("\u65E0");
 
 		text_5 = new Text(composite_6, SWT.BORDER);
 		text_5.setEnabled(false);
@@ -341,7 +368,7 @@ public class MainView {
 
 		Composite composite_7 = new Composite(composite_4, SWT.NONE);
 		composite_7.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_7.setLayout(new GridLayout(8, false));
+		composite_7.setLayout(new GridLayout(9, false));
 
 		Label label_3 = new Label(composite_7, SWT.NONE);
 		label_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -388,6 +415,15 @@ public class MainView {
 			}
 		});
 		button_15.setText("\u521D\u59CB\u5316");
+		
+		Button button_47 = new Button(composite_7, SWT.RADIO);
+		button_47.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(4, 5);
+			}
+		});
+		button_47.setText("\u65E0");
 
 		text_7 = new Text(composite_7, SWT.BORDER);
 		text_7.setEnabled(false);
@@ -399,7 +435,7 @@ public class MainView {
 
 		Composite composite_8 = new Composite(composite_4, SWT.NONE);
 		composite_8.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_8.setLayout(new GridLayout(8, false));
+		composite_8.setLayout(new GridLayout(9, false));
 
 		Label label_4 = new Label(composite_8, SWT.NONE);
 		label_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -446,6 +482,15 @@ public class MainView {
 			}
 		});
 		button_19.setText("\u521D\u59CB\u5316");
+		
+		Button button_48 = new Button(composite_8, SWT.RADIO);
+		button_48.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(5, 5);
+			}
+		});
+		button_48.setText("\u65E0");
 
 		text_9 = new Text(composite_8, SWT.BORDER);
 		text_9.setEnabled(false);
@@ -457,7 +502,7 @@ public class MainView {
 
 		Composite composite_9 = new Composite(composite_4, SWT.NONE);
 		composite_9.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		composite_9.setLayout(new GridLayout(8, false));
+		composite_9.setLayout(new GridLayout(9, false));
 
 		Label label_5 = new Label(composite_9, SWT.NONE);
 		label_5.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -504,6 +549,15 @@ public class MainView {
 			}
 		});
 		button_23.setText("\u521D\u59CB\u5316");
+		
+		Button button_49 = new Button(composite_9, SWT.RADIO);
+		button_49.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(6, 5);
+			}
+		});
+		button_49.setText("\u65E0");
 
 		text_11 = new Text(composite_9, SWT.BORDER);
 		text_11.setEnabled(false);
@@ -514,7 +568,7 @@ public class MainView {
 		text_27.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_10 = new Composite(composite_4, SWT.NONE);
-		composite_10.setLayout(new GridLayout(8, false));
+		composite_10.setLayout(new GridLayout(9, false));
 
 		Label label_6 = new Label(composite_10, SWT.NONE);
 		label_6.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -561,6 +615,15 @@ public class MainView {
 			}
 		});
 		button_27.setText("\u521D\u59CB\u5316");
+		
+		Button button_50 = new Button(composite_10, SWT.RADIO);
+		button_50.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(7, 5);
+			}
+		});
+		button_50.setText("\u65E0");
 
 		text_13 = new Text(composite_10, SWT.BORDER);
 		text_13.setEnabled(false);
@@ -571,7 +634,7 @@ public class MainView {
 		text_28.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_11 = new Composite(composite_4, SWT.NONE);
-		composite_11.setLayout(new GridLayout(8, false));
+		composite_11.setLayout(new GridLayout(9, false));
 
 		Label label_7 = new Label(composite_11, SWT.NONE);
 		label_7.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -618,6 +681,15 @@ public class MainView {
 			}
 		});
 		button_31.setText("\u521D\u59CB\u5316");
+		
+		Button button_51 = new Button(composite_11, SWT.RADIO);
+		button_51.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(8, 5);
+			}
+		});
+		button_51.setText("\u65E0");
 
 		text_15 = new Text(composite_11, SWT.BORDER);
 		text_15.setEnabled(false);
@@ -628,7 +700,7 @@ public class MainView {
 		text_29.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_12 = new Composite(composite_4, SWT.NONE);
-		composite_12.setLayout(new GridLayout(8, false));
+		composite_12.setLayout(new GridLayout(9, false));
 
 		Label label_8 = new Label(composite_12, SWT.NONE);
 		label_8.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -675,6 +747,15 @@ public class MainView {
 			}
 		});
 		button_35.setText("\u521D\u59CB\u5316");
+		
+		Button button_52 = new Button(composite_12, SWT.RADIO);
+		button_52.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(9, 5);
+			}
+		});
+		button_52.setText("\u65E0");
 
 		text_17 = new Text(composite_12, SWT.BORDER);
 		text_17.setEnabled(false);
@@ -685,7 +766,7 @@ public class MainView {
 		text_30.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Composite composite_13 = new Composite(composite_4, SWT.NONE);
-		composite_13.setLayout(new GridLayout(8, false));
+		composite_13.setLayout(new GridLayout(9, false));
 
 		Label label_9 = new Label(composite_13, SWT.NONE);
 		label_9.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -732,6 +813,15 @@ public class MainView {
 			}
 		});
 		button_39.setText("\u521D\u59CB\u5316");
+		
+		Button button_53 = new Button(composite_13, SWT.RADIO);
+		button_53.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.getRunMap().put(10, 5);
+			}
+		});
+		button_53.setText("\u65E0");
 
 		text_19 = new Text(composite_13, SWT.BORDER);
 		text_19.setEnabled(false);
