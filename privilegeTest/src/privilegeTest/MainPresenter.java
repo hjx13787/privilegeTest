@@ -36,16 +36,21 @@ public class MainPresenter {
 	MainView view;
 
 	public void initCard(int num) {
+		List<String> list = new ArrayList<String>();
 		setLog("开始初始化卡片，数量为" + num);
-		for (int i = 0; mapcard.keySet().size() < num;) {
+		for (int i = 0; list.size() < num;) {
 			StringBuilder cardnum = new StringBuilder("00000000");
 			Random rm = new Random();
 			for (int j = 0; j < 8; j++) {
 				cardnum.append(nums[rm.nextInt(16)]);
 			}
-			mapcard.put(cardnum.toString(), "");
+			String string = mapcard.get(cardnum.toString());
+			if (string==null) {
+				mapcard.put(cardnum.toString(), "1");
+				list.add(cardnum.toString());
+			}
 		}
-		saveCard();
+		saveCard(list);
 		setLog("初始化卡片完成");
 		setCardList();
 	}
@@ -54,11 +59,10 @@ public class MainPresenter {
 		view.setLog(string);
 	}
 
-	private void saveCard() {
+	private void saveCard(List<String> list2) {
 		try {
 			List<Card> list = new ArrayList<Card>();
-			Set<String> keySet = mapcard.keySet();
-			for (String string : keySet) {
+			for (String string : list2) {
 				String upload = getCardUpload(string);
 				String delete = getCardDelete(string);
 				String search = getCardSearch(string);
@@ -125,6 +129,7 @@ public class MainPresenter {
 		cd.deleteCardAll();
 		setListc(cd.findAll());
 		setCardList();
+		mapcard.clear();
 	}
 
 	public void go() {
